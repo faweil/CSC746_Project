@@ -50,7 +50,7 @@ int main(int argc, char** argv)
    std::cout << std::fixed << std::setprecision(8);
 
    // #define MAX_PROBLEM_SIZE 1 << 28  //  256M
-   #define MAX_PROBLEM_SIZE 20000
+   #define MAX_PROBLEM_SIZE 205
 
    // 16, 32, 64, 128, 256 -million.
    std::vector<int64_t> problem_sizes{
@@ -71,7 +71,7 @@ int main(int argc, char** argv)
 
    //quickSort(0, A.size()-1, &A[0]);
 
-   omp_set_num_threads(4);
+   //omp_set_num_threads(4);
 
    // insert your timer code here
    std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
@@ -84,11 +84,11 @@ int main(int argc, char** argv)
    std::chrono::duration<double> elapsed = end_time - start_time;
    printf(" elapsed time = %f \n", elapsed);
 
-   //for (const auto& a : A){
-      //std::cout << a << " ";
-   //}
+   for (const auto& a : A){
+      std::cout << a << " ";
+   }
 
-   //std::cout << std::endl;
+   std::cout << std::endl;
 
 /* 
    // For each test size 
