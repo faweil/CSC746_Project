@@ -43,13 +43,13 @@ void openMP(int64_t lb, int64_t ub, uint64_t* Array, int64_t taskLimit){
     {
         if ((ub - lb) < taskLimit ){
             //small array, therefore sort sequential
-            std::cout << "going to sequential sorting" << std::endl;
+            //std::cout << "going to sequential sorting" << std::endl;
 
             return quickSort(lb, ub, Array);
         }else{
-            std::cout << "-------------LEETS GOO-----------------" << std::endl;
-            #pragma omp parallel
-            {
+            //std::cout << "-------------LEETS GOO-----------------" << std::endl;
+            
+            
                 //int nthreads = omp_get_num_threads();
                 //int thread_id = omp_get_thread_num();
             
@@ -58,20 +58,9 @@ void openMP(int64_t lb, int64_t ub, uint64_t* Array, int64_t taskLimit){
                 int64_t pivot_index = partition_openMP(lb, ub, Array);
 
                 #pragma omp task shared(Array)
-                { 
-                    //int thread_id = omp_get_thread_num();
-                    //printf("quickSort_openMP: Hello world: thread %d of %d checking in. \n", thread_id, nthreads);
-                    //printf("in first section\n");
                     openMP(lb, pivot_index - 1, Array, taskLimit);            // left part of array
-                }    
                 #pragma omp task shared(Array)
-                {
-                    //int thread_id = omp_get_thread_num();
-                    //printf("quickSort_openMP: Hello world: thread %d of %d checking in. \n", thread_id, nthreads);
-                    //printf("in second section\n");
                     openMP(pivot_index + 1, ub, Array, taskLimit);            // right part of array
-                }
-            }
         }
         
     }
@@ -82,7 +71,7 @@ void quickSort_openMP(int64_t lb, int64_t ub, uint64_t* Array){
     #pragma omp parallel
         {
             #pragma omp single
-            openMP(lb, ub, Array, 200);
+            openMP(lb, ub, Array, 0);
             #pragma omp taskwait
         }
 
