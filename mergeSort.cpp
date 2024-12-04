@@ -40,10 +40,10 @@ void merge(int64_t lb, int64_t mid, int64_t ub, uint64_t* Array){
         }
     }
 
-
-    for(int64_t k = lb; k <= ub; ++k){               // copy help_array into finale array
-        Array[k] = help_array[k];
-    }
+    //for(int64_t k = lb; k <= ub; ++k){               // copy help_array into finale array
+    //    Array[k] = help_array[k];
+    //}
+    memcpy(Array, help_array, ub * sizeof(int64_t));
 
 }
 
@@ -52,7 +52,7 @@ void merge(int64_t lb, int64_t mid, int64_t ub, uint64_t* Array){
 void mergeSort(int64_t lb, int64_t ub, uint64_t* Array){
 
     if(lb < ub){
-        int64_t mid = (lb + ub) / 2;
+        int64_t mid = lb + (ub - lb) / 2;
         mergeSort(lb, mid, Array);             // left array
         mergeSort(mid + 1, ub, Array);         // right array
         merge(lb, mid, ub, Array);             // merge two sub arrays back together
