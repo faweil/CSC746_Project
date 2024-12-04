@@ -10,7 +10,7 @@ extern void mergeSort(int64_t lb, int64_t ub, uint64_t* A);
 extern void quickSort(int64_t lb, int64_t ub, uint64_t* A);
 
 extern void quickSort_openMP(int64_t lb, int64_t ub, uint64_t* A);
-
+extern void mergeSort_openMP(int64_t lb, int64_t ub, uint64_t* A);
 
 extern void setup(int64_t N, uint64_t* A);
 
@@ -30,7 +30,7 @@ void testRun(){
    }
    std::cout << std::endl;
 
-   mergeSort(0, exampleArray.size()-1, &exampleArray[0]);
+   mergeSort_openMP(0, exampleArray.size()-1, &exampleArray[0]);
    
    std::cout << "\n" << "----after sorting----" << std::endl;
 
@@ -49,7 +49,7 @@ int main(int argc, char** argv)
    std::cout << std::fixed << std::setprecision(8);
 
    // #define MAX_PROBLEM_SIZE 1 << 28  //  256M
-   #define MAX_PROBLEM_SIZE 20000000
+   #define MAX_PROBLEM_SIZE 200000
 
    // 16, 32, 64, 128, 256 -million.
     std::vector<int64_t> problem_sizes{
@@ -68,12 +68,12 @@ int main(int argc, char** argv)
    // invoke user code to set up the problem
    setup(A.size(), &A[0]);
 
-   //omp_set_num_threads(16);
+   omp_set_num_threads(16);
 
    // insert your timer code here
    std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
 
-   mergeSort(0, A.size()-1, &A[0]);
+   mergeSort_openMP(0, A.size()-1, &A[0]);
 
    // insert your end timer code here, and print out elapsed time for this problem size
    std::chrono::time_point<std::chrono::high_resolution_clock> end_time = std::chrono::high_resolution_clock::now();

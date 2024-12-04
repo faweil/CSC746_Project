@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
-/*------- This is the serial merge sort implementation -------*/
+#include <omp.h>
+
+/*------- This is the parallel merge sort implementation with openMP-------*/
 
 // Array = array which has to get sorted in ascending order
 // lb = lower bound, first index of Array
@@ -8,7 +10,7 @@
 // mid = mid of array
 
 
-void merge(int64_t lb, int64_t mid, int64_t ub, uint64_t* Array){
+void merge_openMP(int64_t lb, int64_t mid, int64_t ub, uint64_t* Array){
     int64_t i = lb;                             // index from left sub array
     int64_t j = mid + 1;                        // index from right sub array
     int64_t k = lb;                             // index from help_array
@@ -48,13 +50,18 @@ void merge(int64_t lb, int64_t mid, int64_t ub, uint64_t* Array){
 
 
 // Divides the array in sub arrays and calls the merge function if it can not divide sub array anymore
-void mergeSort(int64_t lb, int64_t ub, uint64_t* Array){
+void mergeSort_parallel(int64_t lb, int64_t ub, uint64_t* Array, int64_t taskLimit){
 
     if(lb < ub){
         int64_t mid = lb + (ub - lb) / 2;
-        mergeSort(lb, mid, Array);             // left array
-        mergeSort(mid + 1, ub, Array);         // right array
-        merge(lb, mid, ub, Array);             // merge two sub arrays back together
+
+        #pragma omp task shared(Array)
+            mergeSort_parallel(lb, mid, Array, taskLimit);             // left array
+        #pragma omp task shared(Array)
+            mergeSort_parallel(mid + 1, ub, Array, taskLimit);         // right array
+
+        #pragma omp taskwait
+        merge_openMP(lb, mid, ub, Array);             // merge two sub arrays back together
     }
 }
 
@@ -62,6 +69,13 @@ void mergeSort(int64_t lb, int64_t ub, uint64_t* Array){
 
 
 
+void mergeSort_openMP(int64_t lb, int64_t ub, uint64_t* Array){
+    #pragma omp parallel
+        {
+            #pragma omp single
+            mergeSort_parallel(lb, ub, Array, 300);
+        }
 
+}
 
 

@@ -37,7 +37,7 @@ int partition_openMP(int64_t lb, int64_t ub, uint64_t* Array){
 //printf("my_dgemv(): For actual timing runs, please comment out these printf() and omp_get_*() statements. \n");
 //printf("my_dgemv(): Hello world: thread %d of %d checking in. \n", thread_id, nthreads);
 
-void openMP(int64_t lb, int64_t ub, uint64_t* Array, int64_t taskLimit){
+void quickSort_parallel(int64_t lb, int64_t ub, uint64_t* Array, int64_t taskLimit){
 
     if(lb < ub)
     {
@@ -58,9 +58,9 @@ void openMP(int64_t lb, int64_t ub, uint64_t* Array, int64_t taskLimit){
                 int64_t pivot_index = partition_openMP(lb, ub, Array);
 
                 #pragma omp task shared(Array)
-                    openMP(lb, pivot_index - 1, Array, taskLimit);            // left part of array
+                    quickSort_parallel(lb, pivot_index - 1, Array, taskLimit);            // left part of array
                 #pragma omp task shared(Array)
-                    openMP(pivot_index + 1, ub, Array, taskLimit);            // right part of array
+                    quickSort_parallel(pivot_index + 1, ub, Array, taskLimit);            // right part of array
         }
         
     }
@@ -71,7 +71,7 @@ void quickSort_openMP(int64_t lb, int64_t ub, uint64_t* Array){
     #pragma omp parallel
         {
             #pragma omp single
-            openMP(lb, ub, Array, 0);
+            quickSort_parallel(lb, ub, Array, 300);
             #pragma omp taskwait
         }
 
