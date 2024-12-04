@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 /*------- This is the serial merge sort implementation -------*/
 
 // Array = array which has to get sorted in ascending order
@@ -43,7 +44,7 @@ void merge(int64_t lb, int64_t mid, int64_t ub, uint64_t* Array){
     //for(int64_t k = lb; k <= ub; ++k){               // copy help_array into finale array
     //    Array[k] = help_array[k];
     //}
-    memcpy(Array, help_array, ub * sizeof(int64_t));
+    memcpy(Array + lb, help_array + lb, (ub - lb + 1) * sizeof(int64_t));
 
 }
 

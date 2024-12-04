@@ -49,7 +49,7 @@ int main(int argc, char** argv)
    std::cout << std::fixed << std::setprecision(8);
 
    // #define MAX_PROBLEM_SIZE 1 << 28  //  256M
-   #define MAX_PROBLEM_SIZE 20000
+   #define MAX_PROBLEM_SIZE 20000000
 
    // 16, 32, 64, 128, 256 -million.
     std::vector<int64_t> problem_sizes{
