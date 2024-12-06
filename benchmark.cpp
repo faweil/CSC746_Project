@@ -6,11 +6,13 @@
 #include <string.h>
 #include <omp.h>
 
-extern void mergeSort(int64_t lb, int64_t ub, uint64_t* A);
+//extern void mergeSort(int64_t lb, int64_t ub, uint64_t* A);
 extern void quickSort(int64_t lb, int64_t ub, uint64_t* A);
+extern void mergeSort(uint64_t* A, int64_t n, uint64_t* t);
 
-extern void quickSort_openMP(int64_t lb, int64_t ub, uint64_t* A);
-extern void mergeSort_openMP(int64_t lb, int64_t ub, uint64_t* A);
+
+//extern void quickSort_openMP(int64_t lb, int64_t ub, uint64_t* A);
+//extern void mergeSort_openMP(int64_t lb, int64_t ub, uint64_t* A);
 
 extern void setup(int64_t N, uint64_t* A);
 
@@ -30,7 +32,7 @@ void testRun(){
    }
    std::cout << std::endl;
 
-   mergeSort_openMP(0, exampleArray.size()-1, &exampleArray[0]);
+   //mergeSort_openMP(0, exampleArray.size()-1, &exampleArray[0]);
    
    std::cout << "\n" << "----after sorting----" << std::endl;
 
@@ -61,8 +63,9 @@ int main(int argc, char** argv)
    };
    
    std::vector<uint64_t> A(MAX_PROBLEM_SIZE);
+   std::vector<uint64_t> t(MAX_PROBLEM_SIZE);
 
-   int64_t t;
+   //int64_t t;
    int n_problems = problem_sizes.size();
 
    // invoke user code to set up the problem
@@ -73,19 +76,19 @@ int main(int argc, char** argv)
    // insert your timer code here
    std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
 
-   mergeSort_openMP(0, A.size()-1, &A[0]);
-
+   //mergeSort_openMP(0, A.size()-1, &A[0]);
+   mergeSort(&A[0], A.size(), &t[0]);
    // insert your end timer code here, and print out elapsed time for this problem size
    std::chrono::time_point<std::chrono::high_resolution_clock> end_time = std::chrono::high_resolution_clock::now();
 
    std::chrono::duration<double> elapsed = end_time - start_time;
    printf(" elapsed time = %f \n", elapsed);
 
-  // for (const auto& a : A){
-  //    std::cout << a << " ";
-  // }
+   //for (const auto& a : A){
+   //   std::cout << a << " ";
+   //}
 
-  // std::cout << std::endl;
+   //std::cout << std::endl;
 
 /* 
    // For each test size 
