@@ -9,82 +9,67 @@
 // ub = upper bound, last index of Array
 // mid = mid of array
 
-extern void mergeSort(int64_t lb, int64_t ub, uint64_t* A);
+extern void mergeSort(uint64_t* A, int64_t n, uint64_t* t);
 
 
-void merge_openMP(int64_t lb, int64_t mid, int64_t ub, uint64_t* Array){
-    int64_t i = lb;                             // index from left sub array
-    int64_t j = mid + 1;                        // index from right sub array
-    int64_t k = lb;                             // index from help_array
-    int64_t* help_array = new int64_t[ub + 1];  // help_array
+void merge_openMP(uint64_t* Array, int64_t n, uint64_t* tmp) {
+   int64_t i = 0;
+   int64_t j = n/2;
+   int64_t ti = 0;
 
-    while(i <= mid && j <= ub){
-        if(Array[i] <= Array[j]){
-            help_array[k] = Array[i];
-            ++i;
-        }
-        else {
-            help_array[k] = Array[j];
-            ++j;
-        }
-        ++k;
-    }
+   while (i<n/2 && j<n) {
+      if (Array[i] < Array[j]) {
+         tmp[ti] = Array[i];
+         ti++; i++;
+      } else {
+         tmp[ti] = Array[j];
+         ti++; j++;
+      }
+   }
+   while (i<n/2) { /* finish up lower half */
+      tmp[ti] = Array[i];
+      ti++; i++;
+   }
+      while (j<n) { /* finish up upper half */
+         tmp[ti] = Array[j];
+         ti++; j++;
+   }
+   memcpy(Array, tmp, n*sizeof(uint64_t));
 
-
-    if(i > mid){
-        while(j <= ub){
-            help_array[k] = Array[j];
-            ++j;
-            ++k;
-        }
-    }else {
-        while(i <= mid){
-            help_array[k] = Array[i];
-            ++i;
-            ++k;
-        }
-    }
-
-    memcpy(Array + lb, help_array + lb, (ub - lb + 1) * sizeof(int64_t)); // copy help_array into finale array
-
-    delete[] help_array;
 }
 
 
 // Divides the array in sub arrays and calls the merge function if it can not divide sub array anymore
-void mergeSort_parallel(int64_t lb, int64_t ub, uint64_t* Array, int64_t taskLimit){
+void mergeSort_parallel(uint64_t* Array, int64_t n, uint64_t* tmp, int64_t taskLimit){
 
-    if(lb < ub){
+   if (n < 2) return;
 
-        if ((ub - lb) < taskLimit ){
-            //small array, therefore sort sequential
-            std::cout << "going to sequential sorting" << std::endl;
-            return mergeSort(lb, ub, Array);
 
-        }else{
-            std::cout << "Parallel sorting" << std::endl;
-            int64_t mid = lb + (ub - lb) / 2;
+    if (n < taskLimit ){
+        //small array, therefore sort sequential
+        //std::cout << "going to sequential sorting" << std::endl;
+        return mergeSort(Array, n, tmp);
 
-            #pragma omp task shared(Array)
-            mergeSort_parallel(lb, mid, Array, taskLimit);             // left array
-            #pragma omp task shared(Array)
-            mergeSort_parallel(mid + 1, ub, Array, taskLimit);         // right array
+    }else{
+        //std::cout << "Parallel sorting" << std::endl;
 
-            #pragma omp taskwait
-            merge_openMP(lb, mid, ub, Array);             // merge two sub arrays back together
-        }
+        #pragma omp task shared(Array)
+        mergeSort_parallel(Array, n/2, tmp, taskLimit);             // left array
+        #pragma omp task shared(Array)
+        mergeSort_parallel(Array+(n/2), n-(n/2), tmp, taskLimit);         // right array
+
+        #pragma omp taskwait
+        merge_openMP(Array, n, tmp);             // merge two sub arrays back together
     }
 }
 
 
 
-
-
-void mergeSort_openMP(int64_t lb, int64_t ub, uint64_t* Array){
+void mergeSort_openMP(uint64_t* Array, int64_t n, uint64_t* tmp){
     #pragma omp parallel
         {
             #pragma omp single
-            mergeSort_parallel(lb, ub, Array, 300);
+            mergeSort_parallel(Array, n, tmp, 300);
         }
 
 }

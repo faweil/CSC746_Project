@@ -70,7 +70,7 @@ void merge(uint64_t* Array, int64_t n, uint64_t* tmp) {
    }
    memcpy(Array, tmp, n*sizeof(uint64_t));
 
-} // end of merge()
+}
 
 
 
