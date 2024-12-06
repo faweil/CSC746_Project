@@ -45,7 +45,7 @@ void testRun(){
 /* The benchmarking program */
 int main(int argc, char** argv) 
 {
-   testRun();
+   //testRun();
    std::cout << std::fixed << std::setprecision(8);
 
    // #define MAX_PROBLEM_SIZE 1 << 28  //  256M
