@@ -56,7 +56,7 @@ void mergeSort_parallel(uint64_t* Array, int64_t n, uint64_t* tmp, int64_t taskL
         #pragma omp task shared(Array)
         mergeSort_parallel(Array, n/2, tmp, taskLimit);             // left array
         #pragma omp task shared(Array)
-        mergeSort_parallel(Array+(n/2), n-(n/2), tmp, taskLimit);         // right array
+        mergeSort_parallel(Array+(n/2), n-(n/2), tmp+(n/2), taskLimit);         // right array
 
         #pragma omp taskwait
         merge_openMP(Array, n, tmp);             // merge two sub arrays back together
@@ -69,7 +69,7 @@ void mergeSort_openMP(uint64_t* Array, int64_t n, uint64_t* tmp){
     #pragma omp parallel
         {
             #pragma omp single
-            mergeSort_parallel(Array, n, tmp, 300);
+            mergeSort_parallel(Array, n, tmp, 150);
         }
 
 }

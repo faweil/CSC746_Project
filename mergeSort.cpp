@@ -81,7 +81,7 @@ void mergeSort(uint64_t* Array, int64_t n, uint64_t* tmp)
 
    mergeSort(Array, n/2, tmp);
 
-   mergeSort(Array+(n/2), n-(n/2), tmp);
+   mergeSort(Array+(n/2), n-(n/2), tmp+(n/2));
 
     /* merge sorted halves into sorted list */
    merge(Array, n, tmp);
