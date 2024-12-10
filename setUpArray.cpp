@@ -5,7 +5,6 @@
 
 
 void setup(int64_t N, uint64_t* A){
-    printf(" setting up Array with problem size, N=%lld \n", N);
     srand48(2);  // 2 is seed value
 
     for(int64_t i = 0; i < N; ++i) {
