@@ -20,7 +20,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-fname = "runtimeQuickSort.csv"
+fname = "runtimeMergeSort.csv"
 df = pd.read_csv(fname, comment="#")
 print(df)
 
@@ -38,7 +38,7 @@ conc_15 = df[var_names[4]].values.tolist()
 conc_40 = df[var_names[5]].values.tolist()
 conc_60 = df[var_names[6]].values.tolist()
 
-plt.title("quickSort-openMP: Runtime across varying levels of concurrency & problem sizes")
+plt.title("mergeSort-openMP: Runtime across varying levels of concurrency & problem sizes")
 
 xlocs = [i for i in range(len(problem_sizes))]
 

@@ -32,13 +32,13 @@ void testRun(){
    }
    std::cout << std::endl;
 
-   /** choose one of the following sorting algorithms **/
+   /** choose (uncomment) one of the following sorting algorithms **/
 
    //mergeSort(&exampleArray[0], exampleArray.size(), &t[0]);
    //mergeSort_openMP(&exampleArray[0], exampleArray.size(), &t[0]);
 
    //quickSort(0, exampleArray.size()-1, &exampleArray[0]);
-   quickSort_openMP(0, exampleArray.size()-1, &exampleArray[0]);
+   //quickSort_openMP(0, exampleArray.size()-1, &exampleArray[0]);
 
 
    std::cout << "\n" << "----after sorting----" << std::endl;
@@ -52,13 +52,24 @@ void testRun(){
 
 
 
-/* The benchmarking program */
 int main(int argc, char** argv) 
 {
-   // set number of threads:
-   omp_set_num_threads(16);
+   int numThreads = 1;
 
-   testRun();         // with small size of N, to check if sorting is correct
+   if(argc < 2) {
+      printf("no concurrency level from command line\n");
+      printf("in this case concurrency level 1 is used\n");
+   }else{
+      // Convert command-line argument to integer
+      numThreads = std::atoi(argv[1]);
+   }
+
+   // Set the number of threads for OpenMP
+   omp_set_num_threads(numThreads);
+   std::cout << "Number of threads set to: " << numThreads << std::endl;
+
+
+   //testRun();      // with small size of N, to check if sorting is correct
 
 
    std::cout << std::fixed << std::setprecision(8);
@@ -75,36 +86,8 @@ int main(int argc, char** argv)
       MAX_PROBLEM_SIZE
    };
    
-//   std::vector<uint64_t> A(MAX_PROBLEM_SIZE);
-//   std::vector<uint64_t> t(MAX_PROBLEM_SIZE);      // for mergeSort algo
-
    int n_problems = problem_sizes.size();
 
-   // invoke user code to set up the problem
-//   setup(A.size(), &A[0]);
-
-   // set number of threads:
-   //omp_set_num_threads(16);
-
-   // insert your timer code here
-//   std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
-
-   
-//   mergeSort_openMP(&A[0], A.size(), &t[0]);
-   // insert your end timer code here, and print out elapsed time for this problem size
-//   std::chrono::time_point<std::chrono::high_resolution_clock> end_time = std::chrono::high_resolution_clock::now();
-
-//   std::chrono::duration<double> elapsed = end_time - start_time;
-//   printf(" elapsed time = %f \n", elapsed);
-
-   //for (const auto& a : A){
-   //   std::cout << a << " ";
-   //}
-
-   //std::cout << std::endl;
-
- 
-   // For each test size 
    for (int64_t n : problem_sizes) 
    {
       printf("Working on problem size N=%lld \n", n);
@@ -119,7 +102,7 @@ int main(int argc, char** argv)
       std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
 
 
-      /** choose one of the following sorting algorithms **/
+      /** choose (uncomment) one of the following sorting algorithms **/
 
       //mergeSort(&A[0], n, &t[0]);
       mergeSort_openMP(&A[0], n, &t[0]);
@@ -135,12 +118,6 @@ int main(int argc, char** argv)
 
       printf(" Sorting is done\n");
       printf(" elapsed time = %f \n", elapsed);
-
-      //for (const auto& a : A){
-      //   std::cout << a << " ";
-      //}
-
-      //std::cout << std::endl;
 
    } // end loop over problem sizes
     
